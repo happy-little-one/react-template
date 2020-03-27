@@ -1,0 +1,33 @@
+@import 'tailwindcss/utilities';
+
+.page-header {
+  padding: 0 24px;
+  padding-bottom: 16px;
+  background: #fff;
+}
+
+.page-title {
+  margin: 0;
+  line-height: 1.75;
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.page-content {
+  padding: 24px;
+  overflow: auto;
+}
+
+.page-card {
+  margin-bottom: 24px;
+  padding: 24px;
+  background: #fff;
+}
+
+.page-tabs .ant-tabs-nav .ant-tabs-tab {
+  padding-top: 0;
+}
+
+.page-tabpane {
+  padding: 8px 24px 0 24px;
+}
