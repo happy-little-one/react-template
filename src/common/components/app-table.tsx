@@ -33,37 +33,31 @@ interface Props<Item> extends TableProps<Item> {
    *
    * 其他继承自antd TableProps
    */
-  url: string
   header?: SFC<Deps<Item>>
   hasPagination?: boolean
   search?: searchProps
   getColumns: (deps: Deps<Item>) => ColumnType<Item>[]
   getOns?: any[]
-  pageKey?: string
-  formatResponse?: (res: any) => { data: Item[]; total?: number }
+  fetchData: Function
 }
 
 const AppTable = <Item extends object>(props: Props<Item>) => {
   const {
-    url,
     header,
     search,
     hasPagination,
     getColumns,
     getOns,
-    pageKey,
-    formatResponse,
+    fetchData,
     className = 'page-card',
     ...rest
   } = props
 
   const { queries, data, pagination, loading, getData, onSearch } = useList<
     Item
-  >(url, {
+  >(fetchData, {
     queries: (search || {}).defaultValue,
     hasPagination,
-    pageKey,
-    formatResponse,
   })
 
   const deps = { queries, data, getData, onSearch } as Deps<Item>

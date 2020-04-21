@@ -3,10 +3,9 @@ import { Link, RouteComponentProps } from 'react-router-dom'
 import { Button, Table } from 'antd'
 import { LeftOutlined } from '@ant-design/icons'
 
+import { Goods, GoodsService } from '@/domain/goods'
 import { Detail, ImgPreview } from '@/common/components'
-import { http, fenToYuan } from '@/common/utils'
-
-import { enums, Order } from './common'
+import { http } from '@/common/utils'
 
 const OrderDetail: SFC<RouteComponentProps> = ({ match }) => {
   const [items, setItems] = useState([])
@@ -15,8 +14,8 @@ const OrderDetail: SFC<RouteComponentProps> = ({ match }) => {
   useEffect(() => {
     const { params } = match
     http.get('/orders/id', { params }).then(res => {
-      const order: Order = res.data
-      const { id, name, desc, type, status, price } = order
+      const order: Goods = res.data
+      const { id, name, typeName, statusName, fixedPrice } = order
       setTitle(`订单${id}`)
       setItems([
         {
@@ -32,11 +31,11 @@ const OrderDetail: SFC<RouteComponentProps> = ({ match }) => {
             },
             {
               title: '订单状态',
-              value: enums.status[status],
+              value: statusName,
             },
             {
               title: '订单来源',
-              value: enums.type[type],
+              value: typeName,
             },
             {
               title: '商品主图',
@@ -48,7 +47,7 @@ const OrderDetail: SFC<RouteComponentProps> = ({ match }) => {
             },
             {
               title: '订单价格',
-              value: fenToYuan(price),
+              value: fixedPrice,
             },
             {
               title: '订单描述',

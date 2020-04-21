@@ -1,33 +1,19 @@
 import { useState, useEffect } from 'react'
 
-import { http } from '@/common/utils'
-
 interface Config<Item> {
   /**
    * @param queries 初始或静态查询参数
    * @param hasPagination 是否带翻页
    * @param getOns 拉取列表的外部useEffect依赖
-   * @param pageKey 传给后端当前页的字段名
-   * @param formatResponse 转换后端的数据
+   * @param fetchData 拉取列表的函数
    */
   queries: object
   hasPagination: boolean
   getOns: any[]
-  pageKey: string
-  formatResponse: (res: Response.List<Item>) => { data: Item[]; total?: number }
 }
 
-export default <Item>(url: string, config?: Partial<Config<Item>>) => {
-  const {
-    queries: initQueries,
-    getOns = [],
-    hasPagination = true,
-    pageKey = 'currentPage',
-    formatResponse = res => ({
-      data: res.data.rows,
-      total: res.data.totalCount,
-    }),
-  } = config
+export default <Item>(fetchData: Function, config?: Partial<Config<Item>>) => {
+  const { queries: initQueries, getOns = [], hasPagination = true } = config
 
   const [params, setParams] = useState({
     current: hasPagination ? 1 : undefined,
@@ -39,21 +25,10 @@ export default <Item>(url: string, config?: Partial<Config<Item>>) => {
 
   const getData = () => {
     setLoading(true)
-    const { current, ...rest } = params
-
-    http
-      .get(url, {
-        params: {
-          [pageKey]: hasPagination ? current : undefined,
-          ...rest,
-        },
-      })
-      .then(res => {
-        const { data, total } = formatResponse(res)
-        setData(data)
-        if (hasPagination) {
-          setTotal(total)
-        }
+    fetchData(params)
+      .then(({ list, total }) => {
+        setData(list)
+        hasPagination && setTotal(total)
       })
       .finally(() => {
         setLoading(false)

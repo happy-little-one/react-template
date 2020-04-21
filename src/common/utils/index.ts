@@ -2,6 +2,11 @@ import reject from 'ramda/es/reject'
 import dayjs from 'dayjs'
 import { message } from 'antd'
 
+interface EnumItem {
+  label: string
+  value: number | string
+}
+
 import { BASE_URL } from '../contants'
 import http from './http'
 
@@ -11,6 +16,10 @@ export const jsonToEnum = (json: object) =>
     label: json[key],
     value: key,
   }))
+
+/** [{ label: '已完成', value: 1 }] => {1: '已完成‘} */
+export const enumToJson = (enums: EnumItem[]) =>
+  enums.reduce((acc, it) => ({ ...acc, [it.value]: it.label }), {})
 
 /** 分转元(已处理空值情况)： 240 => 2.40 */
 export const fenToYuan = (val: number) =>
