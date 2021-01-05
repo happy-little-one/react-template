@@ -36,7 +36,7 @@
     "@formily/antd": "^1.0.8",
     "@formily/antd-components": "^1.0.8",
     "antd": "^4.0.3",
-    "axios": "^0.19.2",
+    "axios": "^0.21.1",
     "dayjs": "^1.8.23",
     "ramda": "^0.27.0",
     "react": "^16.13.0",
